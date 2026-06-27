@@ -115,6 +115,82 @@ Action
 
 ---
 
+## Como Rodar e Testar a API
+
+### 1. Configuração Inicial
+
+```
+git clone https://github.com/CiceroLucas/api-assinaturas
+cd api-assinaturas
+composer install
+```
+
+* Configure o ambiente e o banco de dados (SQLite):
+
+```
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+```
+
+### 2. Executando os Serviços
+
+* Inicia o servidor da API
+  ```
+  php artisan serve
+  ```
+
+* Inicia o Worker que processa as filas de cobrança
+  ```
+  php artisan queue:work  
+  ```
+
+### 3. Endpoints
+
+* Criar um Plano
+```
+POST http://127.0.0.1:8000/api/plans
+
+{
+    "name": "Plano Premium",
+    "price": 49.90,
+    "billing_cycle_in_days": 30
+}
+
+```
+
+* Criar um Aluno
+```
+POST http://127.0.0.1:8000/api/students
+
+{
+    "name": "Lucas",
+    "email": "lucas@example.com"
+}
+
+```
+
+* Assinar o Plano
+```
+POST http://127.0.0.1:8000/api/subscriptions
+
+{
+    "student_id": 1,
+    "plan_id": 1
+}
+
+```
+
+### 4. Simulando a Cobrança Recorrente (Cron Job)
+
+```
+php artisan billing:process
+```
+
+O comando identificará assinaturas pendentes e as enviará para a Fila. Imediatamente, você verá no Terminal 2 (Worker) o log de processamento do Job atuando em segundo plano.
+
+---
+
 # Objetivos do Projeto
 
 Este projeto foi desenvolvido para demonstrar conhecimentos em:
@@ -127,3 +203,5 @@ Este projeto foi desenvolvido para demonstrar conhecimentos em:
 - Scheduler
 - Boas práticas de desenvolvimento
 - Escalabilidade
+
+
