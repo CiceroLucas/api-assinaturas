@@ -1,58 +1,129 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# API Assinaturas - Laravel 13
 
-## About Laravel
+Uma API de gerenciamento de assinaturas desenvolvida com **Laravel 13**, focada em **escalabilidade**, **integridade dos dados** e **separação de responsabilidades**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+O projeto implementa processamento assíncrono para cobranças recorrentes utilizando filas, permitindo que a aplicação mantenha alta performance mesmo com um grande volume de assinaturas.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+# Funcionalidades
 
-## Learning Laravel
+- Gerenciamento de assinaturas
+- Geração automática de faturas
+- Processamento assíncrono de cobranças
+- Cobranças recorrentes
+- Agendamento automático de tarefas
+- Transações de banco de dados para garantir consistência
+- Arquitetura baseada em boas práticas do SOLID
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# Arquitetura
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+O projeto foi desenvolvido evitando o padrão **Fat Controller**, mantendo a regra de negócio desacoplada da camada HTTP.
 
-## Agentic Development
+## Action Classes
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Toda a lógica de negócio é encapsulada em **Action Classes**, proporcionando:
 
-```bash
-composer require laravel/boost --dev
+- Maior reutilização de código
+- Facilidade para testes unitários
+- Controllers enxutos
+- Melhor organização do projeto
 
-php artisan boost:install
+## Queue-Based Processing
+
+As cobranças são processadas em segundo plano através de **Jobs**.
+
+Vantagens:
+
+- Não bloqueia a resposta da API
+- Escalabilidade horizontal
+- Processamento resiliente
+- Melhor experiência para o usuário
+
+## Enums (PHP 8.5)
+
+Utilização de **Enums** para representar estados da aplicação, eliminando o uso de strings "mágicas" e aumentando a segurança do código.
+
+Exemplos:
+
+- Status da assinatura
+- Status da cobrança
+- Status da fatura
+
+## Database Transactions
+
+As operações críticas utilizam **Database Transactions** para garantir atomicidade.
+
+Exemplo:
+
+- Uma assinatura somente é criada caso sua fatura inicial também seja criada com sucesso.
+
+---
+
+# Stack Tecnológica
+
+| Tecnologia | Versão |
+|------------|---------|
+| PHP | 8.5+ |
+| Laravel | 13 |
+| Banco de Dados | Sqlite |
+| Filas | Laravel Queue |
+| Scheduler | Laravel Task Scheduling |
+
+---
+
+# Princípios Utilizados
+
+- SOLID
+- SRP (Single Responsibility Principle)
+- Separation of Concerns
+- Queue-driven Architecture
+- Domain Actions
+- Database Transactions
+- Clean Code
+
+---
+
+# Fluxo da Aplicação
+
+```text
+Cliente
+    │
+    ▼
+Controller
+    │
+    ▼
+Action
+    │
+    ├── Cria Assinatura
+    ├── Cria Fatura
+    └── Dispara Job
+            │
+            ▼
+        Queue
+            │
+            ▼
+      Processamento
+            │
+            ▼
+ Atualização da Cobrança
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+# Objetivos do Projeto
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Este projeto foi desenvolvido para demonstrar conhecimentos em:
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Laravel 13
+- Arquitetura de software
+- Processamento assíncrono
+- Filas
+- Jobs
+- Scheduler
+- Boas práticas de desenvolvimento
+- Escalabilidade
