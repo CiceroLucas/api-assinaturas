@@ -8,3 +8,4 @@ use Illuminate\Support\Facades\Route;
 Route::post('/plans', [PlanController::class, 'store']);
 Route::post('/students', [StudentController::class, 'store']);
 Route::post('/subscriptions', [SubscriptionController::class, 'store']);
+Route::post('/subscriptions/{subscription}/cancel', [SubscriptionController::class, 'cancel']);

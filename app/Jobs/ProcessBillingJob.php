@@ -23,6 +23,12 @@ class ProcessBillingJob implements ShouldQueue
 
     public function handle(): void
     {
+
+        if ($this->subscription->cancelled_at !== null) {
+            $this->delete();
+            return;
+        }
+
         DB::transaction(function () {
             try {
                 $invoice = $this->subscription->invoices()->create([

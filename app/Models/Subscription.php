@@ -9,13 +9,20 @@ use App\Enums\SubscriptionStatus;
 
 class Subscription extends Model
 {
-    protected $fillable = ['student_id', 'plan_id', 'status', 'next_billing_date'];
+    protected $fillable = [
+        'student_id',
+        'plan_id',
+        'status',
+        'next_billing_date',
+        'cancelled_at'
+    ];
 
     protected function casts(): array
     {
         return [
             'status' => SubscriptionStatus::class,
             'next_billing_date' => 'date',
+            'cancelled_at' => 'datetime'
         ];
     }
 
